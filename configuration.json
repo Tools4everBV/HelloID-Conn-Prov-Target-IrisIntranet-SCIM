@@ -1,0 +1,34 @@
+[
+  {
+    "key": "ApiID",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "ApiID",
+      "description": "The API-ID is the unique name for the API to identify it's purpose",
+      "required": true
+    }
+  },
+  {
+    "key": "APIToken",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "type": "password",
+      "label": "APIToken",
+      "description": "The API Token used to authenticate against Iris Intranet. This must be retrieved from within the application.",
+      "required": true
+    }
+  },
+  {
+    "key": "BaseUrl",
+    "type": "input",
+    "defaultValue": "",
+    "templateOptions": {
+      "label": "BaseUrl",
+      "description": "The URL to connect to Iris Intranet. [https://mycompany.irisintranet.com]",
+      "placeholder": "https://mycompany.irisintranet.com]",
+      "required": true
+    }
+  }
+]
