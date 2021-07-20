@@ -64,7 +64,7 @@ if (-not($dryRun -eq $true)) {
         $headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
         $headers.Add("Authorization", "Bearer $($config.ApiToken)")
         $splatParams = @{
-            Uri      = "$($config.BaseUrl)/api/iris/v1/$($config.ApiID)/scim/Users"
+            Uri     = "$($config.BaseUrl)/api/iris/v1/$($config.ApiID)/scim/Users/$aRef"
             Headers = $headers
             Body    = $body
             Method  = 'Patch'
