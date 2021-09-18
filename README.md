@@ -28,9 +28,8 @@ The following settings are required to connect to the API.
 
 | Setting     | Description |
 | ------------ | ----------- |
-| ApiID | The API-ID is the unique name for the API to identify it's purpose |
-| ApiToken | The API Token used to authenticate against Iris Intranet. This must be retrieved from within the application |
-| Uri | The URL to connect to Iris Intranet. [https://mycompany.irisintranet.com]|
+| ApiKey | The API key used to authenticate against Iris Intranet. This must be retrieved from within the application |
+| Uri | The URL to connect to Iris Intranet. [https://mycompany.irisintranet.com/scim]|
 
 ### Prerequisites
 
