@@ -1,22 +1,12 @@
 [
   {
-    "key": "ApiID",
-    "type": "input",
-    "defaultValue": "",
-    "templateOptions": {
-      "label": "ApiID",
-      "description": "The API-ID is the unique name for the API to identify it's purpose",
-      "required": true
-    }
-  },
-  {
-    "key": "APIToken",
+    "key": "ApiKey",
     "type": "input",
     "defaultValue": "",
     "templateOptions": {
       "type": "password",
-      "label": "APIToken",
-      "description": "The API Token used to authenticate against Iris Intranet. This must be retrieved from within the application.",
+      "label": "ApiKey",
+      "description": "The API key used to authenticate against Iris Intranet. This must be retrieved from within the application.",
       "required": true
     }
   },
