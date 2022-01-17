@@ -1,5 +1,12 @@
 # HelloID-Conn-Prov-Target-IrisIntranet-SCIM
 
+| :information_source: Information |
+|:---------------------------|
+| This repository contains the connector and configuration code only. The implementer is responsible to acquire the connection details such as username, password, certificate, etc. You might even need to sign a contract or agreement with the supplier before implementing this connector. Please contact the client's application manager to coordinate the connector requirements.       |
+
+<br />
+
+
 <p align="center">
   <img src="https://static.irisintranet.com/_1200x630_crop_center-center_82_none/Iris-Intranet.png?mtime=20210422150824&focal=none&tmtime=20210422150832">
 </p>
