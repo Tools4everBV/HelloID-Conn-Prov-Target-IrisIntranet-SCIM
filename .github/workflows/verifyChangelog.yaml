@@ -11,15 +11,20 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Ensure full history is fetched
 
-    - name: Check if CHANGELOG.md is updated
+    - name: Ensure CHANGELOG.md is updated
       run: |
-        # Get the list of files changed in the pull request
-        CHANGED_FILES=$(git diff --name-only HEAD^ HEAD)
-        
-        # Check if CHANGELOG.md is in the list of changed files
+        # Fetch the base branch to compare against
+        git fetch origin ${{ github.base_ref }} --depth=1
+
+        # Compare changes between the current branch and the base branch
+        CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }})
+
+        # Check if CHANGELOG.md is included in the list of changed files
         if echo "$CHANGED_FILES" | grep -q 'CHANGELOG.md'; then
-          echo "CHANGELOG.md updated."
+          echo "CHANGELOG.md is updated."
         else
           echo "ERROR: Please update the CHANGELOG.md file with your changes." && exit 1
         fi
