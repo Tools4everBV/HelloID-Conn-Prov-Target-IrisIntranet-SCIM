@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [v1.0.1] - 30-11-2024
 
-Updated readme.
+Updated readme. 
 
 ## [v1.0.0] - 29-11-2024
 
