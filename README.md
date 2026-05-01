@@ -1,57 +1,105 @@
-# HelloID-Conn-Prov-Target-IrisIntranet-SCIM 
-         
-| :information_source: Information |
-|:---------------------------|
-| This repository contains the connector and configuration code only. The implementer is responsible to acquire the connection details such as username, password, certificate, etc. You might even need to sign a contract or agreement with the supplier before implementing this connector. Please contact the client's application manager to coordinate the connector requirements.       |
+# HelloID-Conn-Prov-Target-IrisIntranet
 
-<br />
+> [!IMPORTANT]
+> This connector has been upgraded to a HelloID PowerShell v2 connector and refactored to meet the latest standards.
+Please note that it was updated without a working test environment, so we recommend validating it during implementation.
+
+> [!IMPORTANT]
+> This repository contains the connector and configuration code only. The implementer is responsible to acquire the connection details such as username, password, certificate, etc. You might even need to sign a contract or agreement with the supplier before implementing this connector. Please contact the client's application manager to coordinate the connector requirements.
+
 <p align="center">
   <img src="https://www.tools4ever.nl/connector-logos/irisintranet-logo.png">
 </p>
 
 ## Table of contents
 
-- [Introduction](#Introduction)
-- [Getting started](#Getting-started)
-  + [Connection settings](#Connection-settings)
-  + [Prerequisites](#Prerequisites)
-  + [Supported PowerShell versions](#Supported-PowerShell-versions)
-- [Getting help](#Getting-help)
-- [HelloID Docs](#HelloID-Docs)
+- [HelloID-Conn-Prov-Target-IrisIntranet](#helloid-conn-prov-target-irisintranet)
+  - [Table of contents](#table-of-contents)
+  - [Introduction](#introduction)
+  - [Supported features](#supported-features)
+  - [Getting started](#getting-started)
+    - [HelloID Icon URL](#helloid-icon-url)
+    - [Connection settings](#connection-settings)
+    - [Correlation configuration](#correlation-configuration)
+    - [Field mapping](#field-mapping)
+    - [Account Reference](#account-reference)
+  - [Development resources](#development-resources)
+    - [API endpoints](#api-endpoints)
+  - [Getting help](#getting-help)
+  - [HelloID docs](#helloid-docs)
 
 ## Introduction
 
-The _HelloID-Conn-Prov-Target-IrisIntranet_ connector creates/updates user accounts in IrisIntranet. The IrisIntranet API is a scim (http://www.simplecloud.info) API. The code used for this connector is based on the _https://github.com/Tools4everBV/HelloID-Conn-Prov-Target-Generic-Scim_ generic scim connector.
+_HelloID-Conn-Prov-Target-IrisIntranet_ is a _target_ connector. _IrisIntranet_ provides a set of REST APIs that allow you to programmatically interact with its data.
 
-> Note that this connector has not been tested on a IrisIntranet implementation. Changes might have to be made to the code according to your requirements
+## Supported features
+
+The following features are available:
+
+| Feature                                   | Supported | Actions                         | Remarks          |
+| ----------------------------------------- | --------- | ------------------------------- | ---------------- |
+| **Account Lifecycle**                     | ✅         | Create, Update, Enable, Disable | No delete action |
+| **Permissions**                           | ❌         | -                               |                  |
+| **Resources**                             | ❌         | -                               |                  |
+| **Entitlement Import: Accounts**          | ✅         | -                               |                  |
+| **Entitlement Import: Permissions**       | ❌         | -                               |                  |
+| **Governance Reconciliation Resolutions** | ✅         | -                               |                  |
 
 ## Getting started
+
+### HelloID Icon URL
+URL of the icon used for the HelloID Provisioning target system.
+```
+https://raw.githubusercontent.com/Tools4everBV/HelloID-Conn-Prov-Target-IrisIntranet/refs/heads/main/Icon.png
+```
 
 ### Connection settings
 
 The following settings are required to connect to the API.
 
-| Setting     | Description |
-| ------------ | ----------- |
-| ApiKey | The API key used to authenticate against Iris Intranet. This must be retrieved from within the application |
-| Uri | The URL to connect to Iris Intranet. [https://mycompany.irisintranet.com/scim]|
+| Setting  | Description                                                                                                  |
+| -------- | ------------------------------------------------------------------------------------------------------------ |
+| ApiID    | The API-ID is the unique name for the API to identify it's purpose                                           |
+| ApiToken | The API Token used to authenticate against Iris Intranet. This must be retrieved from within the application |
+| Uri      | The URL to connect to Iris Intranet. [https://mycompany.irisintranet.com]                                    |
 
-### Prerequisites
+### Correlation configuration
 
-- When using the HelloID On-Premises agent, Windows PowerShell 5.1 must be installed.
+The correlation configuration is used to specify which properties will be used to match an existing account within _IrisIntranet_ to a person in _HelloID_.
 
-### Supported PowerShell versions
+| Setting                   | Value                             |
+| ------------------------- | --------------------------------- |
+| Enable correlation        | `True`                            |
+| Person correlation field  | `PersonContext.Person.ExternalId` |
+| Account correlation field | `ExternalId`                      |
 
-The connector is created for both Windows PowerShell 5.1 and PowerShell Core. This means that the connector can be executed in both cloud and on-premises using the HelloID Agent.
+> [!TIP]
+> _For more information on correlation, please refer to our correlation [documentation](https://docs.helloid.com/en/provisioning/target-systems/powershell-v2-target-systems/correlation.html) pages_.
 
-> Older versions of Windows PowerShell are not supported.
+### Field mapping
+
+The field mapping can be imported by using the _fieldMapping.json_ file.
+
+### Account Reference
+
+The account reference is populated with the property `id` property from _IrisIntranet_
+
+
+## Development resources
+
+### API endpoints
+
+The following endpoints are used by the connector
+
+| Endpoint | HTTP Method      | Description                                  |
+| -------- | ---------------- | -------------------------------------------- |
+| /Users   | GET, POST, PATCH | Retrieve, Create and update user information |
 
 ## Getting help
 
-> _For more information on how to configure a HelloID PowerShell connector, please refer to our [documentation](https://docs.helloid.com/hc/en-us/articles/360012518799-How-to-add-a-target-system) pages_
+> [!TIP]
+> _For more information on how to configure a HelloID PowerShell connector, please refer to our [documentation](https://docs.helloid.com/en/provisioning/target-systems/powershell-v2-target-systems.html) pages_.
 
-> _If you need help, feel free to ask questions on our [forum](https://forum.helloid.com)_
-
-## HelloID Docs
+## HelloID docs
 
 The official HelloID documentation can be found at: https://docs.helloid.com/
