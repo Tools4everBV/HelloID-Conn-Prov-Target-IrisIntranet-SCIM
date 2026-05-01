@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com), and this project adheres to [Semantic Versioning](https://semver.org).
 
+## [2.0.0] - 01-05-2026
+
+- Initial release of the powershell v2 version.
+
 ## [1.0.5] - 20-12-2024
 
 - Updated readme.
