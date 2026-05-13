@@ -116,12 +116,16 @@ function ConvertTo-HelloIDAccountObject {
         $AccountObject
     )
     process {
+        if ($AccountObject.emails.count -gt 1) {
+            $AccountObject.emails = $AccountObject.emails | Where-Object primary
+        }
+
         # Making sure only fieldMapping fields are imported
         $helloidAccountObject = [PSCustomObject]@{}
-        foreach ($property in $actionContext.Data.PSObject.Properties) {
+        foreach ($property in $outputContext.Data.PSObject.Properties) {
             switch ($property.Name) {
                 'EmailAddress'      { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.emails.value }
-                'IsEmailPrimary'    { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue "$($AccountObject.emails.primary)" }
+                'IsEmailPrimary'    { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue "$($AccountObject.emails.primary)".toLower() }
                 'EmailAddressType'  { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.emails.type }
                 'Username'          { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.userName }
                 'ExternalId'        { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.externalId }
@@ -131,7 +135,7 @@ function ConvertTo-HelloIDAccountObject {
                 'FamilyNamePrefix'  { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.name.familyNamePrefix }
                 'IsEnabled'         { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.active }
                 default             { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.$($property.Name) }
-            }
+            }   
         }
         Write-Output $helloidAccountObject
     }
@@ -179,7 +183,7 @@ try {
         Write-Information "Verifying if a IrisIntranet account exists where $correlationField is: [$correlationValue]"
         $lookup = $responseAllUsers | Group-Object -Property $correlationField -AsHashTable
 
-        if (-not $lookup.ContainsKey($correlationValue)) {
+        if ($null -eq $lookup -or -not $lookup.ContainsKey($correlationValue)) {
             $correlatedAccount = $null
         }
         else {
@@ -188,6 +192,7 @@ try {
             if ($correlatedAccount.Count -gt 1) {
                 throw "Multiple accounts found for $correlationField = $correlationValue"
             }
+            $correlatedAccount = $correlatedAccount[0]
         }
     }
 
@@ -243,7 +248,7 @@ try {
 
                 $createdAccount = Invoke-RestMethod @splatCreateParams
 
-                $outputContext.Data = ConvertTo-HelloIDOutputAccountObject($createdAccount)
+                $outputContext.Data = ConvertTo-HelloIDAccountObject($createdAccount)
                 $outputContext.AccountReference = $createdAccount.id
             }
             else {
@@ -256,7 +261,7 @@ try {
         'CorrelateAccount' {
             Write-Information 'Correlating IrisIntranet account'
 
-            $outputContext.Data = $correlatedAccount
+            $outputContext.Data = ConvertTo-HelloIDAccountObject($correlatedAccount)
             $outputContext.AccountReference = $correlatedAccount.Id
             $outputContext.AccountCorrelated = $true
             $auditLogMessage = "Correlated account: [$($outputContext.AccountReference)] on field: [$($correlationField)] with value: [$($correlationValue)]"
