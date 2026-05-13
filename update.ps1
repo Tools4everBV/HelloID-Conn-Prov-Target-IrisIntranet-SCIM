@@ -52,13 +52,16 @@ function ConvertTo-HelloIDAccountObject {
         $AccountObject
     )
     process {
+        if ($AccountObject.emails.count -gt 1) {
+            $AccountObject.emails = $AccountObject.emails | Where-Object primary
+        }
 
         # Making sure only fieldMapping fields are imported
         $helloidAccountObject = [PSCustomObject]@{}
-        foreach ($property in $actionContext.Data.PSObject.Properties) {
+        foreach ($property in $outputContext.Data.PSObject.Properties) {
             switch ($property.Name) {
                 'EmailAddress'      { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.emails.value }
-                'IsEmailPrimary'    { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue "$($AccountObject.emails.primary)" }
+                'IsEmailPrimary'    { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue "$($AccountObject.emails.primary)".toLower() }
                 'EmailAddressType'  { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.emails.type }
                 'Username'          { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.userName }
                 'ExternalId'        { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.externalId }
@@ -68,7 +71,7 @@ function ConvertTo-HelloIDAccountObject {
                 'FamilyNamePrefix'  { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.name.familyNamePrefix }
                 'IsEnabled'         { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.active }
                 default             { $helloidAccountObject | Add-Member -NotePropertyName $property.Name -NotePropertyValue $AccountObject.$($property.Name) }
-            }
+            }   
         }
         Write-Output $helloidAccountObject
     }
@@ -91,13 +94,12 @@ try {
         Headers     = $headers
         ContentType = 'application/json'
     }
-    $targetAccount = Invoke-RestMethod @splatGetUser
+    $correlatedAccount = Invoke-RestMethod @splatGetUser
 
+    if ($null -ne $correlatedAccount) {
+        $correlatedAccount = ConvertTo-HelloIDAccountObject -AccountObject $correlatedAccount
 
-    if ($null -ne $targetAccount) {
         # Always compare the account against the current account in target system
-        $correlatedAccount = ConvertTo-HelloIDCompareAccountObject($targetAccount)
-
         $outputContext.PreviousData = $correlatedAccount
 
         $splatCompareProperties = @{

@@ -23,6 +23,8 @@ Please note that it was updated without a working test environment, so we recomm
     - [Correlation configuration](#correlation-configuration)
     - [Field mapping](#field-mapping)
     - [Account Reference](#account-reference)
+  - [Remarks](#remarks)
+    - [email](#email)
   - [Development resources](#development-resources)
     - [API endpoints](#api-endpoints)
   - [Getting help](#getting-help)
@@ -83,6 +85,12 @@ The field mapping can be imported by using the _fieldMapping.json_ file.
 ### Account Reference
 
 The account reference is populated with the property `id` property from _IrisIntranet_
+
+## Remarks
+
+### email
+- **Only use primary email**: The connector only uses the primary email address of an account. As a result, no email addresses other than the primary address are available in the `personData` within HelloID.
+In `update.ps1`, the script only compares the primary email address from IrisIntranet with the value from the field mapping to determine whether an update is required.
 
 
 ## Development resources
